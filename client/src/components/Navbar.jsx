@@ -23,7 +23,7 @@ const Navbar = () => {
             <p>
               |
             </p>
-            <p>Hi,  {user.firstName + " " + user.lastName} </p>
+            <p className='max-sm:hidden'>Hi,  {user.firstName + " " + user.lastName} </p>
             <UserButton />
           </div>
          ) :(
