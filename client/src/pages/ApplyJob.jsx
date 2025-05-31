@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import Loading from "../components/Loading";
+import Navbar from "../components/Navbar";
+import { assets } from "../assets/assets";
+import kConvert from "k-convert";
 
 const ApplyJob = () => {
   const { id } = useParams();
@@ -24,7 +27,45 @@ const ApplyJob = () => {
     }
   }, [id, jobs]);
 
-  return jobData ? <div></div> : <Loading />;
+  return jobData ? (
+    <div>
+      <>
+        <Navbar />
+        <div>
+          <div>
+            <div>
+              <div>
+                <img src={jobData.companyId.image} alt="" />
+                <div>
+                  <h1>{jobData.title}</h1>
+                  <div>
+                    <span>
+                      <img src={assets.suitcase_icon} alt="" />
+                      {jobData.companyId.name}
+                    </span>
+                    <span>
+                      <img src={assets.location_icon} alt="" />
+                      {jobData.location}
+                    </span>
+                    <span>
+                      <img src={assets.person_icon} alt="" />
+                      {jobData.level}
+                    </span>
+                    <span>
+                      <img src={assets.money_icon} alt="" />
+                      CTC: {kConvert.convertTo(jobData.salary)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    </div>
+  ) : (
+    <Loading />
+  );
 };
 
 export default ApplyJob;
