@@ -1,9 +1,29 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 const ApplyJob = () => {
-  return (
-    <div>ApplyJob</div>
-  )
-}
+  const { id } = useParams();
+  const [jobData, setJobData] = useState(null);
 
-export default ApplyJob
+  const { jobs } = useContext(AppContext);
+
+  const fetchJob = async () => {
+    const data = jobs.filter((job) => job._id === id); // Filter the job by ID
+
+    if (data.length !== 0) {
+      setJobData(data[0]); // Set the job data if found
+    }
+    console.log("🚀 ~ fetchJob ~ data:", data);
+  };
+
+  useEffect(() => {
+    if (jobs.length > 0) {
+      fetchJob();
+    }
+  }, [id, jobs]);
+
+  return <div></div>;
+};
+
+export default ApplyJob;
