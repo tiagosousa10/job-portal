@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
+import Loading from "../components/Loading";
 
 const ApplyJob = () => {
   const { id } = useParams();
@@ -23,7 +24,7 @@ const ApplyJob = () => {
     }
   }, [id, jobs]);
 
-  return <div></div>;
+  return jobData ? <div></div> : <Loading />;
 };
 
 export default ApplyJob;
