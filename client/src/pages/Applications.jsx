@@ -2,6 +2,8 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import { assets, jobsApplied } from "../assets/assets";
 import moment from "moment";
+import Footer from "../components/Footer";
+
 const Applications = () => {
   const [isEdit, setIsEdit] = React.useState(false);
   const [resume, setResume] = React.useState(null);
@@ -85,17 +87,25 @@ const Applications = () => {
                     {moment(job.date).format("ll")}
                   </td>
                   <td className="py-2 px-4 border-b">
-                      <span className={`${job.status === "Accepted" ? "bg-green-100" : job.status === "Rejected" ? "bg-red-100" : "bg-blue-100"} px-4 py-1.5 rounded`}>
-                    {job.status}
-
-                      </span>
-                    </td>
+                    <span
+                      className={`${
+                        job.status === "Accepted"
+                          ? "bg-green-100"
+                          : job.status === "Rejected"
+                          ? "bg-red-100"
+                          : "bg-blue-100"
+                      } px-4 py-1.5 rounded`}
+                    >
+                      {job.status}
+                    </span>
+                  </td>
                 </tr>
               ) : null
             )}
           </tbody>
         </table>
       </div>
+      <Footer />
     </>
   );
 };

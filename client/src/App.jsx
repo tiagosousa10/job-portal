@@ -1,18 +1,20 @@
-import {Routes, Route} from 'react-router-dom'
-import Home from './pages/Home'
-import Applications from './pages/Applications'
-import ApplyJob from './pages/ApplyJob'
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Applications from "./pages/Applications";
+import ApplyJob from "./pages/ApplyJob";
+import RecruiterLogin from "./components/RecruiterLogin";
 
 const App = () => {
   return (
     <div>
+      <RecruiterLogin />
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/apply-job/:id' element={<ApplyJob />} />
-        <Route path='/applications' element={<Applications />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/apply-job/:id" element={<ApplyJob />} />
+        <Route path="/applications" element={<Applications />} />
       </Routes>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
