@@ -23,7 +23,6 @@ const Applications = () => {
                 <input
                   id="resumeUpload"
                   onChange={(e) => setResume(e.target.files[0])}
-                  type="text"
                   accept="application/pdf"
                   type="file"
                   hidden
