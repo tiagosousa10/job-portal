@@ -1,28 +1,50 @@
 import Company from "../models/Company.js";
 import bcrypt from 'bcrypt';
+import {v2 as cloudinary} from 'cloudinary';
+import generateToken from "../utils/generateToken.js";
 
 //register a new company
 export const registerCompany = async ( req,res) => {
   const {name, email, password} = req.body;
-  const image = req.file;
+  const imageFile = req.file;
 
-  if (!name || !email || !password || !image) {
+  if (!name || !email || !password || !imageFile) {
     return res.json({success:false, message: 'All fields are required to register a company' });
   }
 
+  
   try {
-
+    
     const companyExists = await Company.findOne({ email})
     if (companyExists) {
       return res.json({success:false, message: 'Company with this email already exists' });
     }
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
     
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
+    console.log("🚀 ~ registerCompany ~ hashPassword:", hashPassword)
+    
+    const imageUpload = await cloudinary.uploader.upload(imageFile.path) //upload image to cloudinary
+    console.log("🚀 ~ registerCompany ~ imageUpload:", imageUpload)
+    
+    const company = await Company.create({
+      name,
+      email,
+      password: hashPassword,
+      image: imageUpload.secure_url //save image url to database
+    })
+    console.log("im here")
+
+    return res.json({success:true, message: 'Company registered successfully', company: {
+      _id: company._id,
+      name: company.name,
+      email: company.email,
+      image: company.image
+    }, token: generateToken(company._id) });
+
 
   } catch(error) {
-
+    return res.json({success:false, message: "Error registering company" });
   }
 }
 
