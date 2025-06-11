@@ -19,14 +19,54 @@ export const clerkWebhooks = async (req,res) => {
 
     // switch case for different Events
     switch(type) {
-      case 'user.created': {}
-      case 'user.updated': {}
-      case 'user.deleted': {}
+      case 'user.created': {
+        const userData = {
+          _id: data.id,
+          email: data.email_addresses[0].email_address,
+          name: data.first_name + ' ' + data.last_name,
+          image: data.image_url,
+          resume: '',
+        }
+
+        await User.create(userData)
+        res.json({
+          message: 'User created successfully',
+        });
+        break;
+      }
+
+      case 'user.updated': {
+         const userData = {
+          email: data.email_addresses[0].email_address,
+          name: data.first_name + ' ' + data.last_name,
+          image: data.image_url,
+        }
+
+        await User.findByIdAndUpdate(data.id, userData) // Update user data
+        res.json({
+          message: 'User updated successfully',
+        });
+        break;
+      }
+
+      case 'user.deleted': {
+        await User.findByIdAndDelete(data.id) // Delete user data
+        res.json({
+          message: 'User deleted successfully',
+        });
+        break;
+      }
+
+
       default: 
         break;
     }
 
   } catch (error) {
-
+    console.error('Error processing webhook:', error);
+    res.json({
+      success: false,
+      message: 'Internal Server Error while processing webhook',
+    });
   }
 }
