@@ -50,10 +50,33 @@ export const registerCompany = async ( req,res) => {
 
 //company login
 export const loginCompany = async ( req,res) => {
+  const {email, password} = req.body
+
+  if (!email || !password) {
+    return res.json({success:false, message: 'All fields are required to login' });
+  }
+
   try {
+    const company = await Company.findOne({email}) //find company by email
+
+    if(bcrypt.compare(password, company.password)) {
+      res.json({
+        success:true,
+        company: {
+          _id: company._id,
+          name: company.name,
+          email: company.email,
+          image: company.image
+        },
+        token: generateToken(company._id)
+      })
+    } else {
+       res.json({success:false, message: 'Invalid email or password' });
+    }
+  
 
   } catch(error) {
-
+    res.json({success:false, message: "Error logging in company" });
   }
 }
 
