@@ -1,5 +1,5 @@
 import Company from "../models/Company.js";
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 
 //register a new company
 export const registerCompany = async ( req,res) => {
