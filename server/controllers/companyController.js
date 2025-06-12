@@ -91,6 +91,8 @@ export const getCompanyData = async ( req,res) => {
 
 //post a new job
 export const postJob = async ( req,res) => {
+  
+
   try {
 
   } catch(error) {
