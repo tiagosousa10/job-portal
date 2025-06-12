@@ -85,7 +85,7 @@ export const loginCompany = async ( req,res) => {
 export const getCompanyData = async ( req,res) => {
   try {
 
-  } catch(error) {
+  } catch(error) { 
 
   }
 }
