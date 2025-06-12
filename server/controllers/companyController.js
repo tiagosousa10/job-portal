@@ -92,7 +92,14 @@ export const loginCompany = async (req, res) => {
 //get company details
 export const getCompanyData = async (req, res) => {
   try {
-  } catch (error) {}
+    const company = req.company; // Get company from request
+    res.json({
+      success: true,
+      company,
+    });
+  } catch (error) {
+    res.json({ success: false, message: "Error getting company data" });
+  }
 };
 
 //post a new job
