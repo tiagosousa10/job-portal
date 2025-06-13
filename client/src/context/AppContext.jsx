@@ -4,6 +4,8 @@ import { jobsData } from "../assets/assets";
 export const AppContext = createContext();
 
 export const AppContextProvider = (props) => {
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   const [searchFilter, setSearchFilter] = useState({
     title: "",
     location: "",
@@ -39,6 +41,7 @@ export const AppContextProvider = (props) => {
     setCompanyToken,
     companyData,
     setCompanyData,
+    backendUrl,
   };
 
   return (
