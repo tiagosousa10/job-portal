@@ -9,6 +9,7 @@ import companyRoutes from "./routes/companyRoutes.js";
 import connectCloudinary from "./config/cloudinary.js";
 import jobRoutes from "./routes/jobRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import { clerkMiddleware } from "@clerk/express";
 
 //initialize express app
 const app = express();
@@ -20,6 +21,7 @@ await connectCloudinary();
 // Middleware
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json()); // Parse JSON bodies
+app.use(clerkMiddleware());
 
 //routes
 app.get("/", (req, res) => res.send("Welcome to the server!"));
