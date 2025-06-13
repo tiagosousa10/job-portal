@@ -160,5 +160,26 @@ export const changeJobApplicationStatus = async (req, res) => {
 // change job visibility
 export const changeJobVisibility = async (req, res) => {
   try {
-  } catch (error) {}
+    const { id } = req.body;
+    const companyId = req.company._id; // Get company ID from request
+
+    const job = await Job.findById(id); // Find job by ID
+
+    if (companyId.toString() === job.companyId.toString()) {
+      job.visible = !job.visible;
+    }
+
+    await job.save();
+
+    res.json({
+      success: true,
+      message: "Job visibility changed successfully",
+      job,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: "Error changing job visibility",
+    });
+  }
 };
