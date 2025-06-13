@@ -140,7 +140,15 @@ export const getCompanyJobsApplicants = async (req, res) => {
 //get company posted jobs
 export const getCompanyPostedJobs = async (req, res) => {
   try {
-  } catch (error) {}
+    const companyId = req.company._id; // Get company ID from request
+
+    const jobs = await Job.find({ companyId }); // Find jobs by company ID
+
+    res.json({ success: true, jobsData: jobs });
+    //TODO : adding no of applicatns info in data
+  } catch (error) {
+    res.json({ success: false, message: "Error getting company jobs" });
+  }
 };
 
 //Change job application stattus
