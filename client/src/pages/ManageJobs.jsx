@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 const ManageJobs = () => {
   const navigate = useNavigate();
 
-  const [jobs, setJobs] = React.useState(false);
+  const [jobs, setJobs] = React.useState([]);
 
   const { backendUrl, companyToken } = useContext(AppContext);
 
@@ -26,6 +26,26 @@ const ManageJobs = () => {
         toast.error(data.jobsData);
       }
       console.log("🚀 ~ fetchCompanyJobs ~ data:", data);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  //change job visibility
+  const changeJobVisibility = async (id) => {
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/company/change-visibility",
+        { id },
+        { headers: { token: companyToken } }
+      );
+
+      if (data.success) {
+        toast.success(data.message);
+        fetchCompanyJobs(); // to refresh jobs
+      } else {
+        toast.error(data.message);
+      }
     } catch (error) {
       toast.error(error.message);
     }
@@ -56,7 +76,7 @@ const ManageJobs = () => {
             </tr>
           </thead>
           <tbody>
-            {manageJobsData.map((job, index) => (
+            {jobs.map((job, index) => (
               <tr key={index} className="text-gray-700">
                 <td className="py-2 px-4 border-b max-sm:hidden">
                   {index + 1}
@@ -73,8 +93,8 @@ const ManageJobs = () => {
                   <input
                     className="scale-125 ml-4"
                     type="checkbox"
-                    name=""
-                    id=""
+                    checked={job.visible}
+                    onChange={() => changeJobVisibility(job._id)}
                   />
                 </td>
               </tr>
