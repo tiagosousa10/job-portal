@@ -7,6 +7,7 @@ import { AppContext } from "../context/AppContext";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useEffect } from "react";
 
 const Applications = () => {
   const { user } = useUser();
@@ -14,8 +15,13 @@ const Applications = () => {
   const [isEdit, setIsEdit] = React.useState(false);
   const [resume, setResume] = React.useState(null);
 
-  const { backendUrl, userData, userApplications, fetchUserData } =
-    useContext(AppContext);
+  const {
+    backendUrl,
+    userData,
+    userApplications,
+    fetchUserData,
+    fetchUserApplications,
+  } = useContext(AppContext);
 
   const updateResume = async () => {
     try {
@@ -47,6 +53,12 @@ const Applications = () => {
     setIsEdit(false);
     setResume(null);
   };
+
+  useEffect(() => {
+    if (user) {
+      fetchUserApplications();
+    }
+  }, [user]);
 
   return (
     <>
@@ -80,7 +92,8 @@ const Applications = () => {
             <div className="flex gap-2">
               <a
                 className="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg"
-                href=""
+                href={userData.resume}
+                target="_blank"
               >
                 Resume
               </a>
