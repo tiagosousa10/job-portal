@@ -10,9 +10,11 @@ import JobCard from "../components/JobCard";
 import Footer from "../components/Footer";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useAuth } from "@clerk/clerk-react";
 
 const ApplyJob = () => {
   const { id } = useParams(); // job id
+  const { getToken } = useAuth();
   const [jobData, setJobData] = useState(null);
   const navigate = useNavigate();
 
@@ -42,7 +44,29 @@ const ApplyJob = () => {
         navigate("/applications");
         return toast.error("Upload Resume to apply for Jobs");
       }
-    } catch (error) {}
+
+      const token = await getToken();
+
+      const { data } = await axios.post(
+        backendUrl + "/api/user/apply",
+        {
+          jobId: jobData._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.success) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   useEffect(() => {
