@@ -109,18 +109,18 @@ const Applications = () => {
             </tr>
           </thead>
           <tbody>
-            {jobsApplied.map((job, index) =>
+            {userApplications.map((job, index) =>
               true ? (
-                <tr>
+                <tr key={index}>
                   <td className="py-3 px-4 flex items-center gap-2 border-b">
-                    <img className="w-8 h-8" src={job.logo} alt="" />
-                    {job.companyName}
+                    <img className="w-8 h-8" src={job.companyId.image} alt="" />
+                    {job.companyId.name}
                   </td>
                   <td className="py-2 px-4 border-b max-sm:hidden">
-                    {job.title}
+                    {job.jobId.title}
                   </td>
                   <td className="py-2 px-4 border-b max-sm:hidden">
-                    {job.location}
+                    {job.jobId.location}
                   </td>
                   <td className="py-2 px-4 border-b">
                     {moment(job.date).format("ll")}
