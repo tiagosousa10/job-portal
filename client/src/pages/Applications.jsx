@@ -1,12 +1,52 @@
-import React from "react";
+import React, { useContext } from "react";
 import Navbar from "../components/Navbar";
 import { assets, jobsApplied } from "../assets/assets";
 import moment from "moment";
 import Footer from "../components/Footer";
+import { AppContext } from "../context/AppContext";
+import { useAuth, useUser } from "@clerk/clerk-react";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const Applications = () => {
+  const { user } = useUser();
+  const { getToken } = useAuth();
   const [isEdit, setIsEdit] = React.useState(false);
   const [resume, setResume] = React.useState(null);
+
+  const { backendUrl, userData, userApplications, fetchUserData } =
+    useContext(AppContext);
+
+  const updateResume = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("resume", resume);
+
+      const token = await getToken();
+
+      const { data } = await axios.post(
+        backendUrl + "/api/user/update-resume",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.success) {
+        await fetchUserData();
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+
+    setIsEdit(false);
+    setResume(null);
+  };
 
   return (
     <>
@@ -14,11 +54,11 @@ const Applications = () => {
       <div className="container px-4 min-h-[65vh] 2xl:px-20 mx-auto my-10">
         <h2 className="text-2xl font-semibold ">Your Resume</h2>
         <div className="flex gap-2 mb-6 mt-3">
-          {isEdit ? (
+          {isEdit || (userData && userData.resume === "") ? (
             <>
               <label className="flex items-center" htmlFor="resumeUpload">
                 <p className="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg mr-2">
-                  Select Resume
+                  {resume ? resume.name : "Select Resume"}
                 </p>
                 <input
                   id="resumeUpload"
